@@ -4,20 +4,33 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
-var availableCommands = map[string]func([]string){
+var availableCommandsMap = map[string]func([]string){
 	"exit": exit,
 	"echo": echo,
 	"type": typeFunc,
 }
 
-func typeFunc(args []string) {
-	fmt.Println("Bateu")
+var availableCommands = []string{
+	"exit",
+	"echo",
+	"type",
 }
 
-func echo (args []string) {
+func typeFunc(args []string) {
+	for _, arg := range args {
+		if slices.Contains(availableCommands, arg) {
+			fmt.Printf("%s is a shell builtin\n", arg)
+			continue
+		}
+		fmt.Printf("%s: not found\n", arg)
+	}
+}
+
+func echo(args []string) {
 	if len(args) == 0 {
 		fmt.Println("")
 	} else {
@@ -38,7 +51,7 @@ func evaluateInput(input string) {
 
 	command, args := inputSplitted[0], inputSplitted[1:]
 
-	functionFounded, ok := availableCommands[command]
+	functionFounded, ok := availableCommandsMap[command]
 
 	if ok {
 		functionFounded(args)
