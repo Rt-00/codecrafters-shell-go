@@ -9,6 +9,15 @@ import (
 
 var availableCommands = map[string]func([]string){
 	"exit": exit,
+	"echo": echo,
+}
+
+func echo (args []string) {
+	if len(args) == 0 {
+		fmt.Println("")
+	} else {
+		fmt.Println(strings.Join(args, " "))
+	}
 }
 
 func exit(args []string) {
