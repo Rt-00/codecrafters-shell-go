@@ -10,6 +10,11 @@ import (
 var availableCommands = map[string]func([]string){
 	"exit": exit,
 	"echo": echo,
+	"type": typeFunc,
+}
+
+func typeFunc(args []string) {
+	fmt.Println("Bateu")
 }
 
 func echo (args []string) {
