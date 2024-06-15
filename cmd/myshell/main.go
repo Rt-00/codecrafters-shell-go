@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -21,12 +22,28 @@ var availableCommands = []string{
 }
 
 func typeFunc(args []string) {
+	paths := strings.Split(os.Getenv("PATH"), ":")
+
 	for _, arg := range args {
+		found := false
+
 		if slices.Contains(availableCommands, arg) {
 			fmt.Printf("%s is a shell builtin\n", arg)
 			continue
 		}
-		fmt.Printf("%s: not found\n", arg)
+
+		for _, path := range paths {
+			fp := filepath.Join(path, arg)
+			if _, err := os.Stat(fp); err == nil {
+				fmt.Printf("%s is %s\n", arg, fp)
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			fmt.Printf("%s: not found\n", arg)
+		}
 	}
 }
 
@@ -67,7 +84,9 @@ func main() {
 		input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 		input = strings.TrimRight(input, "\n")
 
-		evaluateInput(input)
+		if input != "" {
+			evaluateInput(input)
+		}
 
 	}
 }
