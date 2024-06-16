@@ -15,6 +15,7 @@ var availableBuiltInCommandsMap = map[string]func([]string){
 	"echo": echo,
 	"type": typeFunc,
 	"pwd":  pwdFunc,
+	"cd":   cd,
 }
 
 var availableBuiltInCommands = []string{
@@ -22,6 +23,13 @@ var availableBuiltInCommands = []string{
 	"echo",
 	"type",
 	"pwd",
+	"cd",
+}
+
+func cd(args []string) {
+	if err := os.Chdir(strings.Join(args, "")); err != nil {
+		fmt.Printf("cd: %s: No such file or directory\n", strings.Join(args, ""))
+	}
 }
 
 func pwdFunc(args []string) {
