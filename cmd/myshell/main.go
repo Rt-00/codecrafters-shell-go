@@ -14,12 +14,18 @@ var availableBuiltInCommandsMap = map[string]func([]string){
 	"exit": exit,
 	"echo": echo,
 	"type": typeFunc,
+	"pwd":  pwdFunc,
 }
 
 var availableBuiltInCommands = []string{
 	"exit",
 	"echo",
 	"type",
+	"pwd",
+}
+
+func pwdFunc(args []string) {
+	fmt.Println(os.Getwd())
 }
 
 func typeFunc(args []string) {
