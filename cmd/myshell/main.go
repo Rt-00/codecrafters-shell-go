@@ -27,8 +27,18 @@ var availableBuiltInCommands = []string{
 }
 
 func cd(args []string) {
-	if err := os.Chdir(strings.Join(args, "")); err != nil {
-		fmt.Printf("cd: %s: No such file or directory\n", strings.Join(args, ""))
+	path := strings.Join(args, "")
+	var err error
+
+	if path == "~" {
+		path, err = os.UserHomeDir()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	if err = os.Chdir(path); err != nil {
+		fmt.Printf("cd: %s: No such file or directory\n", path)
 	}
 }
 
